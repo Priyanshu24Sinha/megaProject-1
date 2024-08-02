@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -g -Wall -I. -Isrc/app/encryptDecrypt -Isrc/app/fileHandling -Isrc/app/processes
-
+LDFLAGS = -lrt -lpthread
 MAIN_TARGET = encrypt_decrypt
 CRYPTION_TARGET = cryption
 
@@ -21,10 +21,10 @@ CRYPTION_OBJ = $(CRYPTION_SRC:.cpp=.o)
 all: $(MAIN_TARGET) $(CRYPTION_TARGET)
 
 $(MAIN_TARGET): $(MAIN_OBJ)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(MAIN_OBJ) $(LDFLAGS) -o $(MAIN_TARGET)
 
 $(CRYPTION_TARGET): $(CRYPTION_OBJ)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $(CRYPTION_OBJ) $(LDFLAGS) -o $(CRYPTION_TARGET)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
