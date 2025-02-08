@@ -8,6 +8,7 @@
 #include <sys/mman.h>
 #include <atomic>
 #include <semaphore.h>
+#include <thread>
 
 ProcessManagement::ProcessManagement() {
     sem_t* itemsSemaphore = sem_open("/items_semaphore", O_CREAT, 0666, 0);
@@ -38,13 +39,16 @@ bool ProcessManagement::submitToQueue(std::unique_ptr<Task> task) {
     lock.unlock();
     sem_post(itemsSemaphore);
 
-    int pid = fork();
-    if (pid < 0) {
-        return false;
-    } else if (pid == 0) {
-        executeTask();
-        exit(0);
-    }
+    // int pid = fork();
+    // if (pid < 0) {
+    //     return false;
+    // } else if (pid == 0) {
+    //     executeTask();
+    //     exit(0);
+    // }
+
+    std::thread thread_1(&ProcessManagement::executeTask,this);
+    thread_1.detach();
     return true;
 }
 
